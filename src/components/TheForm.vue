@@ -50,6 +50,10 @@
       </div>
     </div>
     <div class="form-control">
+      <!-- External form component -->
+      <RatingControl />
+    </div>
+    <div class="form-control">
       <input type="checkbox" id="confirm-terms" name="confirm-terms" v-model="confirm"/>
       <label for="confirm-terms">Agree to terms of use?</label>
     </div>
@@ -62,11 +66,15 @@
 </template>
 
 <script>
+    import RatingControl from './RatingControl.vue'
     import {
         ref,
         // reactive
     } from 'vue';
     export default {
+        components: {
+            RatingControl
+        },
         setup() {
             const userName = ref('');
             const userAge = ref(null);
