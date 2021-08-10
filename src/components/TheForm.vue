@@ -1,8 +1,11 @@
 <template>
   <form @submit.prevent="submitForm">
-    <div class="form-control">
+    <div class="form-control" :class="{invalid: userNameValidity === 'invalid'}">
       <label for="user-name">Your Name</label>
-      <input id="user-name" name="user-name" type="text" v-model.trim="userName"/>
+      <!-- Blue is a built in event used for validation -->
+      <!-- Trim is a built in method for removing whitespace from an input -->
+      <input id="user-name" name="user-name" type="text" v-model.trim="userName" @blur="validateInput"/>
+      <p v-if="userNameValidity === 'invalid'">Please enter a valid name!</p>
     </div>
     <div class="form-control">
       <label for="age">Your Age (Years)</label>
@@ -10,7 +13,7 @@
     </div>
     <div class="form-control">
       <label for="referrer">How did you hear about us?</label>
-      <select id="referrer" name="referrer">
+      <select id="referrer" name="referrer" v-model="referrer">
         <option value="google">Google</option>
         <option value="wom">Word of mouth</option>
         <option value="newspaper">Newspaper</option>
@@ -19,32 +22,36 @@
     <div class="form-control">
       <h2>What are you interested in?</h2>
       <div>
-        <input id="interest-news" name="interest" type="checkbox" />
+        <input id="interest-news" name="interest" type="checkbox" value="news" v-model="interest"/>
         <label for="interest-news">News</label>
       </div>
       <div>
-        <input id="interest-tutorials" name="interest" type="checkbox" />
+        <input id="interest-tutorials" name="interest" type="checkbox" value="tutorials" v-model="interest"/>
         <label for="interest-tutorials">Tutorials</label>
       </div>
       <div>
-        <input id="interest-nothing" name="interest" type="checkbox" />
+        <input id="interest-nothing" name="interest" type="checkbox" value="nothing" v-model="interest"/>
         <label for="interest-nothing">Nothing</label>
       </div>
     </div>
     <div class="form-control">
       <h2>How do you learn?</h2>
       <div>
-        <input id="how-video" name="how" type="radio" />
+        <input id="how-video" name="how" type="radio" value="video" v-model="how"/>
         <label for="how-video">Video Courses</label>
       </div>
       <div>
-        <input id="how-blogs" name="how" type="radio" />
+        <input id="how-blogs" name="how" type="radio" value="blogs" v-model="how"/>
         <label for="how-blogs">Blogs</label>
       </div>
       <div>
-        <input id="how-other" name="how" type="radio" />
+        <input id="how-other" name="how" type="radio" value="other" v-model="how"/>
         <label for="how-other">Other</label>
       </div>
+    </div>
+    <div class="form-control">
+      <input type="checkbox" id="confirm-terms" name="confirm-terms" v-model="confirm"/>
+      <label for="confirm-terms">Agree to terms of use?</label>
     </div>
     <div>
       <button>Save Data</button>
@@ -56,26 +63,56 @@
 
 <script>
     import {
-        ref
+        ref,
+        // reactive
     } from 'vue';
     export default {
         setup() {
             const userName = ref('');
             const userAge = ref(null);
+            const referrer = ref('Select Option');
+            const interest = ref([]);
+            const how = ref(null);
+            const confirm = ref(false);
+            const userNameValidity = ref('pending');
 
             function submitForm() {
                 console.log('username: ' + userName.value);
                 userName.value = '';
                 console.log('User age:');
                 console.log(userAge.value);
-                console.log(31);
                 userAge.value = null;
+                console.log('referrer: ' + referrer.value);
+                referrer.value = 'Select Option';
+                console.log('Checkboxes');
+                console.log(interest.value);
+                console.log('Radio Buttons');
+                console.log(how.value);
+                interest.value = [];
+                how.value = null;
+                console.log('Confirm?');
+                console.log(confirm.value);
+                confirm.value = false;
+            }
+
+            function validateInput() {
+                if (userName.value === '') {
+                    userNameValidity.value = 'invalid';
+                } else {
+                    userNameValidity.value = 'valid';
+                }
             }
 
             return {
                 userName,
                 submitForm,
-                userAge
+                userAge,
+                referrer,
+                interest,
+                how,
+                confirm,
+                userNameValidity,
+                validateInput
             }
         }
         // data() {
@@ -104,6 +141,10 @@
     
     .form-control {
         margin: 0.5rem 0;
+    }
+    
+    .form-control.invalid input {
+        border: solid 1px red;
     }
     
     label {
