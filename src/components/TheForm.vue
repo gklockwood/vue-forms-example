@@ -45,13 +45,13 @@
         <label for="how-blogs">Blogs</label>
       </div>
       <div>
-        <input id="how-other" name="how" type="radio" value="other" v-model="how"/>
+        <input id="how-other" name="ho w" type="radio" value="other" v-model="how"/>
         <label for="how-other">Other</label>
       </div>
     </div>
     <div class="form-control">
       <!-- External form component -->
-      <RatingControl />
+      <RatingControl v-model="rating"/>
     </div>
     <div class="form-control">
       <input type="checkbox" id="confirm-terms" name="confirm-terms" v-model="confirm"/>
@@ -83,6 +83,7 @@
             const how = ref(null);
             const confirm = ref(false);
             const userNameValidity = ref('pending');
+            const rating = ref(null);
 
             function submitForm() {
                 console.log('username: ' + userName.value);
@@ -101,6 +102,9 @@
                 console.log('Confirm?');
                 console.log(confirm.value);
                 confirm.value = false;
+                console.log('Rating')
+                console.log(rating.value)
+                rating.value = null
             }
 
             function validateInput() {
@@ -120,7 +124,8 @@
                 how,
                 confirm,
                 userNameValidity,
-                validateInput
+                validateInput,
+                rating
             }
         }
         // data() {

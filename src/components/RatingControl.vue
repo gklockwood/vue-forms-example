@@ -1,26 +1,22 @@
 <template>
     <ul>
-        <li :class="{active: activeOption === 'poor'}"><button type="button" @click="activate('poor')">Poor</button></li>
-        <li :class="{active: activeOption === 'average'}"><button type="button" @click="activate('average')">Average</button></li>
-        <li :class="{active: activeOption === 'great'}"><button type="button" @click="activate('great')">Great</button></li>
+        <li :class="{active: modelValue === 'poor'}"><button type="button" @click="activate('poor')">Poor</button></li>
+        <li :class="{active: modelValue === 'average'}"><button type="button" @click="activate('average')">Average</button></li>
+        <li :class="{active: modelValue === 'great'}"><button type="button" @click="activate('great')">Great</button></li>
     </ul>
 </template>
 <script>
-    import {
-        ref
-    } from 'vue';
     export default {
-        setup() {
-            const activeOption = ref(null);
+        // Setting prop here to be used in parent component (TheForm)
+        props: ['modelValue'],
+        // Emits stores value in prop
+        emits: ['update:modelValue'],
 
-            function activate(option) {
-                activeOption.value = option
+        // Pass $emit in as an argument to setup
+        methods: {
+            activate(option) {
+                this.$emit('update:modelValue', option);
             }
-
-            return {
-                activeOption,
-                activate
-            };
         }
     }
 </script>
